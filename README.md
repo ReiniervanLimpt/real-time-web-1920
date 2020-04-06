@@ -8,7 +8,18 @@
 
 > with the help of the tutorial i created a chat application for people who can connect to my server.
 
--
+```javascript
+io.on('connection', function(socket) { // bij een nieuwe connectie, voer dit uit:
+  console.log('a user connected');
+  socket.on('disconnect', function() { // bij een connectie die verbroken wordt, voer dit uit:
+    console.log('user disconnected');
+    console.log(socket.server.sockets.sockets) // door het socket object heen gespit op zoek naar nog actieve sockets
+  });
+  socket.on('chat message', function(msg) {
+    io.emit('chat message', msg);
+  });
+});
+```
 
 - [x] set up an express server
 - [x] finish the Socket.IO [getting started](https://socket.io/get-started/chat/) chat application with websockets.
