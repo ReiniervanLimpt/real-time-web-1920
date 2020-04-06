@@ -19,9 +19,9 @@ function open(req, res) {
   res.render('index.ejs')
 }
 
-io.on('connection', function(socket) {
+io.on('connection', function(socket) { // bij een nieuwe connectie, voer dit uit:
   console.log('a user connected');
-  socket.on('disconnect', function() {
+  socket.on('disconnect', function() { // bij een connectie die verbroken wordt, voer dit uit:
     console.log('user disconnected');
     console.log(socket.server.sockets.sockets) // door het socket object heen gespit op zoek naar nog actieve sockets
   });
