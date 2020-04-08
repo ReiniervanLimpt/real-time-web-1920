@@ -22,6 +22,7 @@
   "homepage": "https://github.com/ReiniervanLimpt/real-time-web-1920#readme",
   "dependencies": {
     "ejs": "^3.0.2",
+    "express": "^4.17.1",
     "node-fetch": "^2.6.0",
     "nodemon": "^2.0.2",
     "socket.io": "^2.3.0"
