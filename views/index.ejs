@@ -1,8 +1,43 @@
 <%- include('partials/head') %>
 
-  <ul id="messages"></ul>
-  <form action="">
-    <input id="m" autocomplete="off" /><input id="send" type="submit" value="find">
+  <form class="username" action="">
+    <input id="u" autocomplete="off" /><input id="send" type="submit" value="become">
   </form>
 
-  <%- include('partials/footer') %>
+  <ul id="messages"></ul>
+
+  <form class="message" action="">
+    <input id="m" autocomplete="off" /><input id="send" type="submit" value="send">
+  </form>
+
+  </main>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+  <script>
+    $(function() {
+
+      const socket = io(); // maakt een globale variabele van io dit is een connectie met de http server
+      $('form.message').submit(function(e) {
+        e.preventDefault(); // prevents page reloading
+        socket.emit('chat message', $('#m').val());
+        $('#m').val('');
+        return false;
+      });
+
+      $('form.username').submit(function(e) {
+        e.preventDefault(); // prevents page reloading
+        socket.emit('new user', $('#u').val());
+        return false;
+      });
+
+      socket.on('chat message', function(msg, style) {
+        $('#messages').append($('<li class="' + style + `">`).text(msg));
+      });
+
+      socket.on('server message', function(msg) {
+        $('#messages').append($('<li>').text(msg));
+      });
+
+    });
+  </script>
