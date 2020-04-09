@@ -36,14 +36,12 @@ io.on('connection', function(socket) { // de code die uitegvoerd wordt voor elke
     console.log('user disconnected');
   });
 
+  socket.on('styled message', function(msg, style) {
+    io.emit('styled message', `${socket.username} : ${msg}`, style);
+  });
+
   socket.on('chat message', function(msg) {
-    const stringArray = msg.split(" ");
-    const textStyle = stringArray[0]
-    if (textStyle.startsWith('/')) {
-      io.emit('chat message', `${socket.username} : ${msg.substring(textStyle.length)}`, `${textStyle.substring(1)}`);
-    } else {
-      io.emit('chat message', `${socket.username} : ${msg}`);
-    }
+    io.emit('chat message', `${socket.username} : ${msg}`);
   });
 
   socket.on('server message', function(msg) {
