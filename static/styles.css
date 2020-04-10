@@ -1,12 +1,36 @@
+@import "reset.css";
+
+#messages { list-style-type: none; margin: 0; padding: 0; }
+#messages li {
+  padding: 5px 10px;
+  width: 94%;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 1px 2px #888888;
+  margin: 10px;
+  background: #e0ecc7;
+ }
+
+ #myMessage {
+   background: white !important;
+ }
 
 body {
   font: 13px Helvetica, Arial;
+  background: #f7e6c4;
 }
 
 form.message {
-  background: #000;
+  background: #f9b233;
   padding: 3px;
   position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+form.username {
+  background: #f9b233;
+  padding: 3px;
   bottom: 0;
   width: 100%;
 }
@@ -18,8 +42,8 @@ form input {
   margin-right: .5%;
 }
 
-.red {
-  color: red;
+.yellow {
+  color: yellow;
 }
 
 .blue {
@@ -31,7 +55,13 @@ form input {
 }
 
 .huge{
-  font-size: 3em;  
+  font-size: 3em;
+}
+
+.error{
+  color: white;
+  font-weight:bold;
+  background: red !important;
 }
 
 #send {
@@ -40,7 +70,3 @@ form input {
   border: none;
   padding: 10px;
 }
-
-#messages { list-style-type: none; margin: 0; padding: 0; }
-#messages li { padding: 5px 10px; }
-#messages li:nth-child(odd) { background: #eee; }

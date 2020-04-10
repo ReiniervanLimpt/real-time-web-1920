@@ -36,12 +36,18 @@ io.on('connection', function(socket) { // de code die uitegvoerd wordt voor elke
     console.log('user disconnected');
   });
 
-  socket.on('styled message', function(msg, style) {
-    io.emit('styled message', `${socket.username} : ${msg}`, style);
+  socket.on('error message', function(error, options) {
+    socket.emit('error message', `${error} is not a command try : ${options}`)
   });
 
-  socket.on('chat message', function(msg) {
-    io.emit('chat message', `${socket.username} : ${msg}`);
+  socket.on('styled message', function(msg, style, sender) {
+    socket.broadcast.emit('styled message', `${socket.username} : ${msg}`, style, "other");
+    socket.emit('styled message', `you : ${msg}`, style, "myMessage")
+  });
+
+  socket.on('chat message', function(msg, sender) {
+    socket.broadcast.emit('chat message', `${socket.username} : ${msg}`, "other")
+    socket.emit('chat message', `you : ${msg}`, "myMessage")
   });
 
   socket.on('server message', function(msg) {
