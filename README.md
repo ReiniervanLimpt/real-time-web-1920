@@ -2,7 +2,7 @@
 
 [rubric]: https://docs.google.com/spreadsheets/d/e/2PACX-1vSd1I4ma8R5mtVMyrbp6PA2qEInWiOialK9Fr2orD3afUBqOyvTg_JaQZ6-P4YGURI-eA7PoHT8TRge/pubhtml
 
-## Week 1 progress:
+## Week 1 progress: https://real-time-chat-app-rvl.herokuapp.com/
 
 ### notes on getting started with socket.io
 
