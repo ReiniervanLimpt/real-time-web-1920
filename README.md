@@ -9,11 +9,10 @@
 > with the help of the tutorial i created a chat application for people who can connect to my server.
 
 ```javascript
-io.on('connection', function(socket) { // bij een nieuwe connectie, voer dit uit:
+io.on('connection', function(socket) { // voor elke connectie, voer dit uit:
   console.log('a user connected');
-  socket.on('disconnect', function() { // bij een connectie die verbroken wordt, voer dit uit:
+  socket.on('disconnect', function() { // als de connectie verbroken wordt, voer dit uit
     console.log('user disconnected');
-    console.log(socket.server.sockets.sockets) // door het socket object heen gespit op zoek naar nog actieve sockets
   });
   socket.on('chat message', function(msg) {
     io.emit('chat message', msg);
@@ -23,5 +22,69 @@ io.on('connection', function(socket) { // bij een nieuwe connectie, voer dit uit
 
 - [x] set up an express server
 - [x] finish the Socket.IO [getting started](https://socket.io/get-started/chat/) chat application with websockets.
-- [ ] deploy to heroku
+- [x] deploy to heroku
 - [ ] land on an idea for my application, what am i going to do?
+
+### broadcast.emit and regular emit
+
+I played around with the example Guido gave us, first by implementing the option to change your username by creating another form which emits a 'new user event':
+
+```javascript
+  $('form.username').submit(function(e) {
+    e.preventDefault(); // prevents page reloading
+    socket.emit('new user', $('#u').val());
+    return false;
+  });
+```
+
+On the server i handle the event which sends a different message to the sender and receivers of the message by using `socket.broadcast.emit` to send to others and `socket.emit` to send to your socket.
+
+*the event:
+
+```javascript
+  socket.on('new user', function(id) {
+    oldName = socket.username
+    socket.username = id
+    socket.broadcast.emit('server message', `${oldName} changed their name to ${socket.username}!`)
+    socket.emit('server message', `welcome to the chat ${socket.username}!`)
+  });
+```
+
+### adding stylized messages
+
+I hardcoded in an array of stylized message options `const commands = ["/yellow", "/blue", "/green", "/huge"]`
+users can now write /huge {their message} to enlarge the text of their message by sending out a 'styled message' event instead of a regular 'chat message' which is handled in an if statement checking if the first word starts with a / and if its a known command:
+
+```javascript
+    if (assignedStyle == true) {
+      socket.emit('styled message', message.substring(messageStyle.length), messageStyle.substring(1));
+      $('#m').val('');
+      return false;
+    } else if (assignedStyle == false && messageStyle.startsWith("/")) {
+      socket.emit('error message', messageStyle, commands)
+      socket.emit('chat message', message.substring(messageStyle.length));
+      $('#m').val('');
+      return false;
+    } else {
+      socket.emit('chat message', message);
+      $('#m').val('');
+      return false;
+    }
+ ```
+ 
+In the serverside JS i give the user feedback when their command is not a known command by emitting an 'error message' event to his/her socket only:
+
+```javascript
+  socket.on('error message', function(error, options) {
+    socket.emit('error message', `${error} is not a command try : ${options}`)
+  });
+```
+
+And when the command is met:
+
+```javascript
+  socket.on('styled message', function(msg, style, sender) {
+    socket.broadcast.emit('styled message', `${socket.username} : ${msg}`, style, "other");
+    socket.emit('styled message', `you : ${msg}`, style, "myMessage")
+  });
+```
