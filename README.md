@@ -88,3 +88,21 @@ And when the command is met:
     socket.emit('styled message', `you : ${msg}`, style, "myMessage")
   });
 ```
+
+## Week 2 progress:
+
+During week 2 i will be building a webapp which consumes data from an external source.
+
+### RIOT GAMES api
+
+Riot games allows users with a RIOT account to generate a api key for development purposes, from reading it [docs](https://developer.riotgames.com/docs/lol) i found that it also includes live game data, which got me thinking about an app which you can run on a secondary monitor which would serve as a "live hack" helping you track in game data in a more clear way.
+
+This would mean my application would only work locally... 
+
+### Rate limits and usage
+
+![riot api](https://user-images.githubusercontent.com/36195440/79229762-d6dea900-7e63-11ea-87cd-6aab4bcb9a64.png)
+
+For development puproses Riot games hands out api keys which have a one day expiration period, these can be requested every day however.
+
+The api also includes endpoints which require no keys, 
