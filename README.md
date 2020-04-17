@@ -91,6 +91,10 @@ And when the command is met:
 
 ## Week 2 progress:
 
+## Data lifecycle
+
+![data cycle_Tekengebied 1](https://user-images.githubusercontent.com/36195440/79560523-0847b680-80a8-11ea-8a0c-76ae9d5511d6.png)
+
 During week 2 i will be building a webapp which consumes data from an external source.
 
 ### RIOT GAMES api
