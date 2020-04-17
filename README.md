@@ -93,7 +93,7 @@ And when the command is met:
 
 ## Data lifecycle
 
-![data cycle_Tekengebied 1](https://user-images.githubusercontent.com/36195440/79560523-0847b680-80a8-11ea-8a0c-76ae9d5511d6.png)
+![data cycle_Tekengebied 1_Tekengebied 1](https://user-images.githubusercontent.com/36195440/79560914-c0755f00-80a8-11ea-9419-e8430049459e.png)
 
 During week 2 i will be building a webapp which consumes data from an external source.
 
