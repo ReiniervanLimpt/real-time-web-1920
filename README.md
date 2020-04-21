@@ -105,7 +105,8 @@ This would mean my application would only work locally...
 
 ### Rate limits and usage
 
-![riot api](https://user-images.githubusercontent.com/36195440/79229762-d6dea900-7e63-11ea-87cd-6aab4bcb9a64.png)
+![data cycle_Tekengebied 1_Tekengebied 1_Tekengebied 1](https://user-images.githubusercontent.com/36195440/79844506-0a698800-83bc-11ea-8bc6-3d7feb3bda21.png)
+
 
 For development puproses Riot games hands out api keys which have a one day expiration period, these can be requested every day however.
 
