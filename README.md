@@ -93,7 +93,7 @@ And when the command is met:
 
 ## Data lifecycle
 
-![data cycle_Tekengebied 1_Tekengebied 1](https://user-images.githubusercontent.com/36195440/79560914-c0755f00-80a8-11ea-9419-e8430049459e.png)
+![data cycle_Tekengebied 1_Tekengebied 1_Tekengebied 1](https://user-images.githubusercontent.com/36195440/79844506-0a698800-83bc-11ea-8bc6-3d7feb3bda21.png)
 
 During week 2 i will be building a webapp which consumes data from an external source.
 
@@ -105,7 +105,7 @@ This would mean my application would only work locally...
 
 ### Rate limits and usage
 
-![data cycle_Tekengebied 1_Tekengebied 1_Tekengebied 1](https://user-images.githubusercontent.com/36195440/79844506-0a698800-83bc-11ea-8bc6-3d7feb3bda21.png)
+![riot api](https://user-images.githubusercontent.com/36195440/79844685-4866ac00-83bc-11ea-854f-a0ad02364951.png)
 
 
 For development puproses Riot games hands out api keys which have a one day expiration period, these can be requested every day however.
