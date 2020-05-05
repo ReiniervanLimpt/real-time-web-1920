@@ -1,0 +1,142 @@
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>T-shirt</title>
+  <script src="/js/client.js"></script>
+  <link rel="stylesheet" type="text/css" href="/styles.css">
+  <link href="https://fonts.googleapis.com/css?family=Oxanium&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <main>
+    <form class="getshirt" action="/getshirt" method="post">
+      <legend aria-label="haal uw design op">HAAL UW DESIGN OP</legend>
+      <input name="shirtId" type="text" value="id">
+      <input type="submit" value="haal op">
+    </form>
+    <div class="shirteditor">
+      <form class="shirtmaker" action="/update" method="post" aria-label="maak je eigen shirt">
+
+        <legend aria-label="kleur van het shirt">KLEUR VAN HET SHIRT</legend>
+
+        <button class="hidden" type="button" name="colorblindn">KLEURENBLIND MODUS: UIT</button>
+
+        <input id="orange" type="radio" name="kleur" value="orange">
+        <label for="orange">ORANGE</label>
+        <input id="perltwinkle" type="radio" name="kleur" value="perltwinkle">
+        <label for="perltwinkle">PERLTWINKLE</label>
+        <input id="green" type="radio" name="kleur" value="green">
+        <label for="green">NERD GREEN</label>
+        <input id="tealblue" type="radio" name="kleur" value="tealblue">
+        <label for="tealblue">TEAL BLUE</label>
+        <input id="gold" type="radio" name="kleur" value="gold">
+        <label for="gold">GOLD</label>
+        <input id="cinnamon" type="radio" name="kleur" value="cinnamon">
+        <label for="cinnamon">CINNAMON</label>
+        <input id="blueviolet" type="radio" name="kleur" value="blueviolet">
+        <label for="blueviolet">BLUEVIOLET</label>
+        <input id="sand" type="radio" name="kleur" value="sand">
+        <label for="sand">SAND</label>
+        <input id="salmon" type="radio" name="kleur" value="salmon">
+        <label for="salmon">SALMON</label>
+        <input id="blauw" type="radio" name="kleur" value="blauw">
+        <label for="blauw">BLUE</label>
+        <input id="rood" type="radio" name="kleur" value="rood">
+        <label for="rood">RED</label>
+        <input id="geel" type="radio" name="kleur" value="groen">
+        <label for="geel">YELLOW</label>
+
+        <legend aria-label="kleur van het shirt">LOGO OP HET SHIRT</legend>
+
+        <input id="heart" type="radio" name="vorm" value="heart">
+        <label id="morphheart" for="heart">HEART</label>
+        <input id="bracket" type="radio" name="vorm" value="bracket">
+        <label id="morphbracket" for="bracket">BRACKET</label>
+        <input id="sword" type="radio" name="vorm" value="sword">
+        <label id="morphsword" for="sword">SWORD</label>
+
+        <legend aria-label="kleur van het shirt">MAAT</legend>
+
+        <select name="maat">
+          <option value="small">S</option>
+          <option value="medium">M</option>
+          <option value="large">L</option>
+          <option value="extra-large">XL</option>
+        </select>
+
+        <input id="man" type="radio" name="geslacht" value="man">
+        <label id="morphmale" for="man">MAN</label>
+        <input id="vrouw" type="radio" name="geslacht" value="vrouw">
+        <label id="morphfemale" for="vrouw">VROUW</label>
+
+        <legend aria-label="sla shirt op">TEKST OP HET SHIRT</legend>
+        <input id="shirtText" name="shirtTekst" type="text" maxlength="8" value="">
+
+        <input type="submit" value="opslaan">
+
+
+
+        <svg viewBox="0 0 242.3 242.3">
+          <path d="M139.2,36.7c-8.4,8-18,8.2-18,8.2s-9.6-0.1-18-8.2c-4-3.8-3.9-6.9-2.7-9.2c0.6-0.1,1.3-0.1,2.1,0
+        		c3.5,0.6,10.4,2.1,18.6,2.1s15.2-1.5,18.6-2.1c0.8-0.1,1.5-0.1,2.1,0C143.1,29.8,143.1,32.9,139.2,36.7z"/>
+        </svg>
+
+        <svg viewBox="0 0 242.3 242.3">
+        	<path id="shirt" d="M197.6,92.4l-28,4.6c-1.1,0.2-1.2-0.8-1.2-0.8l-1.5-8.8c-1.6,5.2-0.9,64-0.9,64s0.2,11.5-0.1,26.5
+        		c-0.4,15,1.7,31.6,1.7,31.6s-0.1,3.9-0.3,5.6c-0.2,1.7-9.5,1.5-9.5,1.5H84.6c0,0-9.3,0.1-9.5-1.5c-0.2-1.7-0.3-5.6-0.3-5.6
+        		s2-16.6,1.7-31.6c-0.4-15-0.1-26.5-0.1-26.5s0.7-58.8-0.9-64L74,96.3c0,0-0.1,0.9-1.2,0.8l-28-4.6c0,0-1.2,0.5-0.6-2.1
+        		C44.8,87.8,54,57,55.8,53.9c1.9-3.1,5.7-7.3,9-8.9c3.3-1.6,4.6-3.5,4.6-3.5l28.1-12.3c0,0,1.6-2.2,5.1-1.6s10.4,2.1,18.6,2.1
+        		s15.2-1.5,18.6-2.1c3.5-0.6,5.1,1.6,5.1,1.6L173,41.5c0,0,1.2,1.9,4.6,3.5c3.3,1.6,7.2,5.8,9,8.9c1.9,3.1,11,33.9,11.6,36.5
+        		C198.8,92.9,197.6,92.4,197.6,92.4z"/>
+
+            <animate id="to-male" href="#shirt"
+            attributeName="d"
+            to="M197.6,92.4l-28,4.6c-1.1,0.2-1.2-0.8-1.2-0.8l-1.5-8.8c-1.6,5.2-0.9,64-0.9,64s0.2,11.5-0.1,26.5
+          		c-0.4,15,1.7,31.6,1.7,31.6s-0.1,3.9-0.3,5.6c-0.2,1.7-9.5,1.5-9.5,1.5H84.6c0,0-9.3,0.1-9.5-1.5c-0.2-1.7-0.3-5.6-0.3-5.6
+          		s2-16.6,1.7-31.6c-0.4-15-0.1-26.5-0.1-26.5s0.7-58.8-0.9-64L74,96.3c0,0-0.1,0.9-1.2,0.8l-28-4.6c0,0-1.2,0.5-0.6-2.1
+          		C44.8,87.8,54,57,55.8,53.9c1.9-3.1,5.7-7.3,9-8.9c3.3-1.6,4.6-3.5,4.6-3.5l28.1-12.3c0,0,1.6-2.2,5.1-1.6s10.4,2.1,18.6,2.1
+          		s15.2-1.5,18.6-2.1c3.5-0.6,5.1,1.6,5.1,1.6L173,41.5c0,0,1.2,1.9,4.6,3.5c3.3,1.6,7.2,5.8,9,8.9c1.9,3.1,11,33.9,11.6,36.5
+          		C198.8,92.9,197.6,92.4,197.6,92.4z"
+            dur="0.5s"
+            fill="freeze" />
+
+            <animate id="to-female" href="#shirt" end-value-list
+            attributeName="d"
+            to="M184.4,91l-16.7,6c-1.1,0.2-1.2-0.8-1.2-0.8l-1.5-8.8c-1.6,5.2-6.8,39.7-6.8,39.7s0.1,9.1-0.2,24.1
+             c-0.4,15,1.7,26.4,1.7,26.4s-0.1,3.9-0.3,5.6c-0.2,1.7-9.5,1.5-9.5,1.5H90c0,0-9.3,0.1-9.5-1.5c-0.2-1.7-0.3-5.6-0.3-5.6
+             s2-11.4,1.7-26.4c-0.4-15-0.1-26.5-0.1-26.5s-2.7-32-4.3-37.2L76,96.3c0,0-0.1,0.9-1.2,0.8l-19.6-5.4c0,0-1.2,0.5-0.6-2.1
+             C55.2,87,56,57,57.8,53.9c1.9-3.1,5.7-7.3,9-8.9c3.3-1.6,6.3-3,6.3-3l24.4-12.8c0,0,1.6-2.2,5.1-1.6s10.4,2.1,18.6,2.1
+             s15.2-1.5,18.6-2.1c3.5-0.6,5.1,1.6,5.1,1.6L169,41.7c0,0,3.2,1.7,6.6,3.3c3.3,1.6,7.2,5.8,9,8.9c1.9,3.1-0.3,32.5,0.3,35.1
+             C185.6,91.5,184.4,91,184.4,91z"
+            dur="0.5s"
+            fill="freeze" />
+
+        </svg>
+        <svg viewBox="0 0 242.3 242.3">
+          <path id="vorm" d="M142.6,72.4 121.2,72 99.8,72.4 99.4,93.8 99.8,115.2 121.2,115.6 142.6,115.2 143,93.8"/>
+
+          <animate id="to-heart" href="#vorm" end-value-list
+          attributeName="d"
+          to="M126.6,72.4 121.2,78 115.9,72.4 105.1,72 99.8,82.7 121.2,115.6 142.6,82.7 137.3,72.4"
+          dur="0.5s"
+          fill="freeze" />
+
+          <animate id="to-bracket" href="#vorm" end-value-list
+          attributeName="d"
+          to="M121.2,82.2 129.9,82.2 129.9,72.4 111.4,72.4 111.4,115.6 129.9,115.6 129.9,105.8 121.2,105.8"
+          dur="0.5s"
+          fill="freeze" />
+
+          <animate id="to-sword" href="#vorm" end-value-list
+          attributeName="d"
+          to="M117.8,109.9 113.1,105 140.1,67.5 108.4,101.4 102.3,98.5 106.2,103.8 104.5,111.5 111,107.6"
+          dur="0.5s"
+          fill="freeze" />
+          <text class="text" x="50%" y="55%" text-anchor="middle" font-weight="normal"  fill="black" stroke-width="0" ></text>
+        </svg>
+
+      </form>
+    </div>
+  </main>
+</body>
+<script src="pleasurable.js"></script>
