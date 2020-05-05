@@ -1,10 +1,101 @@
 @import "reset.css";
 
+.teamOrderTitle{
+  color: blue;
+  width: 100%;
+  font-size: 1.5em;
+}
+
+.teamChaosTitle{
+  color: red;
+  width: 100%;
+  font-size: 1.5em;
+}
+
+#championKills{
+  width: 20%;
+}
+
+#championKills article {
+  text-align: center;
+}
+
+#championKills article p:nth-of-type(odd){
+ font-size: 1.2em;
+}
+
+#championKills article p:nth-of-type(even){
+ color: grey;
+}
+
+#events li{
+  font-size: 1.2em;
+}
+
+#eventSection {
+  display: flex;
+  height: 50%;
+  margin-top: 10px;
+  background-color: white;
+  border-radius: 10px;
+  padding-top: 2px;
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+#events {
+  width: 20%;
+  text-align: center;
+}
+
+#score {
+  width: 20%;
+  text-align: center;
+}
+
+#teamChaos {
+  flex-wrap: wrap;
+  width: 25%;
+  text-align: center;
+  display: flex;
+  justify-content:center;
+}
+
+#teamOrder {
+  flex-wrap: wrap;
+  width: 25%;
+  text-align: center;
+  display: flex;
+  justify-content:center;
+}
+
+#teamChaos img{
+  width: 100%;
+  border-radius: 6px;
+}
+
+#teamOrder img{
+  width: 100%;
+  border-radius: 6px;
+}
+
+#teamChaos article{
+  width: 25%;
+  margin: 0.5%;
+}
+
+#teamOrder article{
+  width: 25%;
+  margin: 0.5%;
+}
+
 #messages { list-style-type: none; margin: 0; padding: 0; }
 #messages li {
   padding: 5px 10px;
-  width: 94%;
-  padding: 15px;
+  width: 97%;
+  height: 20px;
+  padding-top: 10px;
+  padding-bottom: 5px;
   border-radius: 10px;
   box-shadow: 1px 2px #888888;
   margin: 10px;
@@ -27,8 +118,12 @@ body {
   background: #f7e6c4;
   z-index: 1;
 }
+
+.dead{
+  opacity: 0.2;
+}
+
 form.message {
-  background: #f9b233;
   padding: 3px;
   position: fixed;
   bottom: 0;
@@ -37,7 +132,6 @@ form.message {
 
 form.username {
   text-align: center;
-  background: #f9b233;
   padding: 3px;
   bottom: 0;
   width: 40%;
@@ -50,6 +144,10 @@ form input {
   padding: 10px;
   width: 70%;
   margin-right: .5%;
+}
+
+input#m, input#u{
+  border-radius: 10px 0px 0px 10px;
 }
 
 .yellow {
@@ -75,10 +173,14 @@ form input {
 }
 
 #send {
+  color: white;
   width: 29%;
-  background: rgb(130, 224, 255);
+  background: #a7af95;
   border: none;
   padding: 10px;
+  border-radius: 10px;
+  box-shadow: 1px 2px #888888;
+  border-radius: 0px 10px 10px 0px;
 }
 
 .hidden{
