@@ -40,30 +40,22 @@ chatForm.addEventListener("submit", function(e) {
   }
 })
 
-socket.on('team chaos', function(championSplash, championName, championScore) {
+socket.on('team assignment', function(championSplash, championName, championTeam) {
   const newChampionCard = document.createElement("article")
   const newChampion = document.createElement("img")
   const newChampionName = document.createElement("p")
-  const newChampionScore = document.createElement("p")
   newChampion.classList.add(championName)
   newChampionName.textContent = championName
   newChampion.src = championSplash
-  teamChaos.appendChild(newChampionCard)
-  newChampionCard.appendChild(newChampion)
-  newChampionCard.appendChild(newChampionName)
-})
-
-socket.on('team order', function(championSplash, championName, championScore) {
-  const newChampionCard = document.createElement("article")
-  const newChampion = document.createElement("img")
-  const newChampionName = document.createElement("p")
-  const newChampionScore = document.createElement("p")
-  newChampion.classList.add(championName)
-  newChampionName.textContent = championName
-  newChampion.src = championSplash
-  teamOrder.appendChild(newChampionCard)
-  newChampionCard.appendChild(newChampion)
-  newChampionCard.appendChild(newChampionName)
+  if (championTeam === "CHAOS") {
+    teamChaos.appendChild(newChampionCard)
+    newChampionCard.appendChild(newChampion)
+    newChampionCard.appendChild(newChampionName)
+  } else if (championTeam === "ORDER") {
+    teamOrder.appendChild(newChampionCard)
+    newChampionCard.appendChild(newChampion)
+    newChampionCard.appendChild(newChampionName)
+  }
 })
 
 socket.on('new event', function(msg) {
@@ -99,8 +91,9 @@ socket.on('styled message', function(msg, style) {
   messages.appendChild(newMessage)
 })
 
-socket.on('chat message', function(msg) {
+socket.on('chat message', function(msg, sender) {
   const newMessage = document.createElement("li")
+  newMessage.classList.add(sender)
   newMessage.textContent = msg
   messages.appendChild(newMessage)
 })

@@ -14,6 +14,7 @@
 
 #championKills{
   width: 20%;
+  overflow: scroll;
 }
 
 #championKills article {
@@ -35,17 +36,15 @@
 #eventSection {
   display: flex;
   height: 50%;
-  margin-top: 10px;
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.6);
   border-radius: 10px;
   padding-top: 2px;
-  margin-right: 10px;
-  margin-left: 10px;
 }
 
 #events {
   width: 20%;
   text-align: center;
+  overflow: scroll;
 }
 
 #score {
@@ -58,7 +57,8 @@
   width: 25%;
   text-align: center;
   display: flex;
-  justify-content:center;
+  justify-content: center;
+  background-color: #515151;
 }
 
 #teamOrder {
@@ -67,39 +67,65 @@
   text-align: center;
   display: flex;
   justify-content:center;
+  background-color: #515151;
 }
 
-#teamChaos img{
+#teamChaos img, #teamOrder img{
+  height: 250px;
+  object-fit: cover;
   width: 100%;
-  border-radius: 6px;
 }
 
-#teamOrder img{
+#teamChaos article, #teamOrder article{
+  width: 19%;
+  margin: 0%;
+}
+
+#teamChaos article img, #teamOrder article img{
+    border: solid 1px white;
   width: 100%;
-  border-radius: 6px;
+  margin: 0%;
 }
 
-#teamChaos article{
-  width: 25%;
-  margin: 0.5%;
+#teamChaos article:nth-of-type(1) img, #teamOrder article:nth-of-type(1) img{
+  border-radius: 5px 0px 0px 5px;
 }
 
-#teamOrder article{
-  width: 25%;
-  margin: 0.5%;
+#teamChaos article:last-of-type img, #teamOrder article:last-of-type img{
+  border-radius: 0px 5px 5px 0px;
 }
+
+#teamChaos article:nth-of-type(1), #teamOrder article:nth-of-type(1){
+  border-radius: 5px 0px 0px 5px;
+}
+
+#teamChaos article:last-of-type, #teamOrder article:last-of-type{
+  border-radius: 0px 5px 5px 0px;
+}
+
+#teamChaos article p, #teamOrder article p{
+  color: white;
+  border-radius: 0px 0px 6px 6px;
+}
+
 
 #messages { list-style-type: none; margin: 0; padding: 0; }
+
 #messages li {
   padding: 5px 10px;
-  width: 97%;
   height: 20px;
   padding-top: 10px;
-  padding-bottom: 5px;
   border-radius: 10px;
   box-shadow: 1px 2px #888888;
-  margin: 10px;
-  background: #e0ecc7;
+  margin: 6px;
+  background: #ededed;
+  text-align: right;
+ }
+
+.other{
+  box-shadow: 1px 2px #888888 !important;
+  background: #e0ecc7 !important;
+  text-align: left !important;
  }
 
  #myMessage {
@@ -109,6 +135,7 @@
 body {
   font: 13px Helvetica, Arial;
   background: #f7e6c4;
+  background-image: url("SR.jpg");
 }
 
 #nameSelector{

@@ -3,8 +3,6 @@ const app = express()
 const fs = require('fs')
 const request = require('request')
 
-
-let eventLog = []
 const userBets = []
 let teamChaos = []
 let teamOrder = []
@@ -37,7 +35,7 @@ function open(req, res) {
 
 io.on('connection', function(socket) { // de code die uitgevoerd wordt voor elke connectie/socket:
 
-  eventLog = []
+  let eventLog = []
 
   function createTeams() {
 
@@ -61,8 +59,8 @@ io.on('connection', function(socket) { // de code die uitgevoerd wordt voor elke
           teamOrder.push(player)
         }
       }
-      teamChaos.forEach(element => socket.emit('team chaos', `http://ddragon.leagueoflegends.com/cdn/img/champion/splash/${element.championName}_0.jpg`, `${element.championName}`, "0 / 0 / 0"))
-      teamOrder.forEach(element => socket.emit('team order', `http://ddragon.leagueoflegends.com/cdn/img/champion/splash/${element.championName}_0.jpg`, `${element.championName}`, "0 / 0 / 0"))
+      teamChaos.forEach(element => socket.emit('team assignment', `http://ddragon.leagueoflegends.com/cdn/img/champion/splash/${element.championName}_0.jpg`, `${element.championName}`, `${element.team}`))
+      teamOrder.forEach(element => socket.emit('team assignment', `http://ddragon.leagueoflegends.com/cdn/img/champion/splash/${element.championName}_0.jpg`, `${element.championName}`, `${element.team}`))
     })
   }
 
@@ -81,17 +79,26 @@ io.on('connection', function(socket) { // de code die uitgevoerd wordt voor elke
       const allEvents = data.events.Events
       const allPlayers = data.allPlayers
 
-      if (eventLog.length < allEventsLength && eventLog.length === 0) {
+      if (eventLog.length === 0) {
         allEvents.forEach(element => eventLog.push(element))
         eventLog.forEach(element => checkEventType(element))
-      } else if (eventLog.length < allEventsLength) {
+        console.log("eerste")
+      } else if (eventLog.length + 2 === allEventsLength) {
+        console.log("tweede")
+        const latestEvent = allEventsLength - 1
+        const duplicateEvent = allEventsLength - 2
+        eventLog.push(allEvents[duplicateEvent])
+        checkEventType(eventLog[eventLog.length - 1])
+        eventLog.push(allEvents[latestEvent])
+        checkEventType(eventLog[eventLog.length - 1])
+      } else if (eventLog.length + 1 === allEventsLength) {
+        console.log("derde")
         const latestEvent = allEventsLength - 1
         eventLog.push(allEvents[latestEvent])
         checkEventType(eventLog[eventLog.length - 1])
       }
       allPlayers.forEach(element => checkPulse(element))
     })
-    console.log(eventLog)
     setTimeout(checkForEvents, 1000)
   }
 
@@ -138,7 +145,7 @@ io.on('connection', function(socket) { // de code die uitgevoerd wordt voor elke
   })
 
   socket.on('chat message', function(msg) {
-    socket.broadcast.emit('chat message', `${socket.username} : ${msg}`)
+    socket.broadcast.emit('chat message', `${socket.username} : ${msg}`, "other")
     socket.emit('chat message', `${msg}`)
   })
 
