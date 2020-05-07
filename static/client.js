@@ -95,6 +95,14 @@ socket.on('update score', function(championName, championScore) {
   score.textContent = `${championScore}`
 })
 
+socket.on('clear elements', function(clear) {
+  console.log("skiba")
+  events.innerHTML = clear
+  kills.innerHTML = clear
+  teamChaos.innerHTML = clear
+  teamOrder.innerHTML = clear
+})
+
 socket.on('styled message', function(msg, style) {
   const newMessage = document.createElement("li")
   newMessage.textContent = msg

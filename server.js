@@ -6,6 +6,7 @@ const request = require('request')
 let eventLog = []
 let teamChaos = []
 let teamOrder = []
+let allPlayers = []
 let score = {
   assists: 0,
   creepScore: 0,
@@ -19,6 +20,65 @@ const options = {
   key: fs.readFileSync('key.pem'),
   ca: fs.readFileSync('riotgames.pem')
 }
+
+function retrieveData() {
+  function checkForEvents() {
+    request({
+      method: 'GET',
+      uri: 'https://127.0.0.1:2999/liveclientdata/allgamedata',
+      agentOptions: {
+        ca: options.ca
+      }
+    }, (err, res, body) => {
+      const data = JSON.parse(body)
+      const allEventsLength = data.events.Events.length
+      const allEvents = data.events.Events
+      allPlayers = data.allPlayers
+
+      if (eventLog.length === 0) {
+        allEvents.forEach(element => eventLog.push(element))
+      } else if (eventLog.length + 2 === allEventsLength) {
+        const latestEvent = allEventsLength - 1
+        const duplicateEvent = allEventsLength - 2
+        eventLog.push(allEvents[duplicateEvent])
+        eventLog.push(allEvents[latestEvent])
+      } else if (eventLog.length + 1 === allEventsLength) {
+        const latestEvent = allEventsLength - 1
+        eventLog.push(allEvents[latestEvent])
+      }
+    })
+    setTimeout(checkForEvents, 1000)
+  }
+
+  checkForEvents()
+
+  function getTeams() {
+    request({
+      method: 'GET',
+      uri: 'https://127.0.0.1:2999/liveclientdata/allgamedata',
+      agentOptions: {
+        ca: options.ca
+      }
+    }, (err, res, body) => {
+      const data = JSON.parse(body)
+      allPlayers = data.allPlayers
+      if (teamOrder.length === 0) {
+        allPlayers.forEach(element => assignTeam(element))
+      }
+    })
+
+    function assignTeam(player) {
+      if (player.team === "CHAOS") {
+        teamChaos.push(player)
+      } else if (player.team === "ORDER") {
+        teamOrder.push(player)
+      }
+    }
+  }
+  getTeams()
+}
+
+retrieveData()
 
 const https = require('https').createServer(options, app)
 const io = require('socket.io')(https)
@@ -40,71 +100,45 @@ function open(req, res) {
 
 io.on('connection', function(socket) {
 
-  let eventLog = []
+  socket.emit('clear elements', '')
+
+  let shownEvents = 0
+  let shownChampions = 0
 
   function createTeams() {
-
-    request({
-      method: 'GET',
-      uri: 'https://127.0.0.1:2999/liveclientdata/allgamedata',
-      agentOptions: {
-        ca: options.ca
-      }
-    }, (err, res, body) => {
-      const data = JSON.parse(body)
-      const allPlayers = data.allPlayers
-      if (teamOrder.length === 0) {
-        allPlayers.forEach(element => assignTeam(element))
-      }
-
-      function assignTeam(player) {
-        if (player.team === "CHAOS") {
-          teamChaos.push(player)
-        } else if (player.team === "ORDER") {
-          teamOrder.push(player)
-        }
-      }
+    if (shownChampions === 0 && teamChaos.length != 0) {
       teamChaos.forEach(element => socket.emit('team assignment', `http://ddragon.leagueoflegends.com/cdn/10.9.1/img/champion/${element.championName}.png`, `${element.championName}`, `${element.team}`))
       teamOrder.forEach(element => socket.emit('team assignment', `http://ddragon.leagueoflegends.com/cdn/10.9.1/img/champion/${element.championName}.png`, `${element.championName}`, `${element.team}`))
-    })
+      shownChampions++
+      console.log(teamChaos.length)
+      console.log(shownChampions)
+    }
+    setTimeout(createTeams, 1000)
   }
 
   createTeams()
 
-  function checkForEvents() {
-    request({
-      method: 'GET',
-      uri: 'https://127.0.0.1:2999/liveclientdata/allgamedata',
-      agentOptions: {
-        ca: options.ca
-      }
-    }, (err, res, body) => {
-      const data = JSON.parse(body)
-      const allEventsLength = data.events.Events.length
-      const allEvents = data.events.Events
-      const allPlayers = data.allPlayers
-
-      if (eventLog.length === 0) {
-        allEvents.forEach(element => eventLog.push(element))
-        eventLog.forEach(element => checkEventType(element))
-      } else if (eventLog.length + 2 === allEventsLength) {
-        const latestEvent = allEventsLength - 1
-        const duplicateEvent = allEventsLength - 2
-        eventLog.push(allEvents[duplicateEvent])
-        checkEventType(eventLog[eventLog.length - 1])
-        eventLog.push(allEvents[latestEvent])
-        checkEventType(eventLog[eventLog.length - 1])
-      } else if (eventLog.length + 1 === allEventsLength) {
-        const latestEvent = allEventsLength - 1
-        eventLog.push(allEvents[latestEvent])
-        checkEventType(eventLog[eventLog.length - 1])
-      }
-      allPlayers.forEach(element => checkState(element))
-    })
-    setTimeout(checkForEvents, 1000)
+  function updateEvents() {
+    if (shownEvents === 0) {
+      eventLog.forEach(element => checkEventType(element))
+      shownEvents = eventLog.length
+    } else if (shownEvents + 2 === eventLog.length) {
+      const latestEvent = eventLog.length - 1
+      const duplicateEvent = eventLog.length - 2
+      checkEventType(eventLog[eventLog.length - 1])
+      checkEventType(eventLog[eventLog.length - 2])
+      shownEvents = eventLog.length
+    } else if (shownEvents + 1 === eventLog.length) {
+      const latestEvent = eventLog.length - 1
+      checkEventType(eventLog[eventLog.length - 1])
+      shownEvents = eventLog.length
+    }
+    allPlayers.forEach(element => checkState(element))
+    setTimeout(updateEvents, 1000)
   }
 
-  checkForEvents()
+  updateEvents()
+
 
   function checkEventType(gameEvent) {
     if (gameEvent.EventName === "ChampionKill") {
