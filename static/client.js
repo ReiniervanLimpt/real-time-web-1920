@@ -44,17 +44,23 @@ socket.on('team assignment', function(championSplash, championName, championTeam
   const newChampionCard = document.createElement("article")
   const newChampion = document.createElement("img")
   const newChampionName = document.createElement("p")
+  const newChampionScore = document.createElement("p")
   newChampion.classList.add(championName)
+  newChampionCard.classList.add(`${championName}Card`)
   newChampionName.textContent = championName
+  newChampionScore.textContent = "0 / 0 / 0"
+  newChampionScore.classList.add(`${championName}Score`, "championScore")
   newChampion.src = championSplash
   if (championTeam === "CHAOS") {
     teamChaos.appendChild(newChampionCard)
     newChampionCard.appendChild(newChampion)
     newChampionCard.appendChild(newChampionName)
+    newChampionCard.appendChild(newChampionScore)
   } else if (championTeam === "ORDER") {
     teamOrder.appendChild(newChampionCard)
     newChampionCard.appendChild(newChampion)
     newChampionCard.appendChild(newChampionName)
+    newChampionCard.appendChild(newChampionScore)
   }
 })
 
@@ -82,6 +88,11 @@ socket.on('champion status', function(status, championName) {
   } else {
     champion.classList.remove("dead")
   }
+})
+
+socket.on('update score', function(championName, championScore) {
+  const score = document.getElementsByClassName(`${championName}Score`)[0]
+  score.textContent = `${championScore}`
 })
 
 socket.on('styled message', function(msg, style) {
