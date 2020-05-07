@@ -7,8 +7,8 @@ const bodyParser = require('body-parser')
 const http = require('http').createServer(app)
 const io = require('socket.io')(http)
 
-let gameCheck = 0
 let allPlayers = []
+let gameTime = 0
 let allChampions = []
 let leagueData = []
 let eventLog = []
@@ -44,6 +44,8 @@ app.post('/riotdata', function(req, res) {
 
   allPlayers = req.body.allPlayers
 
+  gameTime = req.body.gameData.gameTime
+
   getTeams()
 
 })
@@ -65,12 +67,22 @@ function getTeams() {
 
 io.on('connection', function(socket) {
 
-  let itemNames = []
+  let newGameTime = 0
+  let shownEvents = 0
+  let shownChampions = 0
 
   socket.emit('clear elements', '')
 
-  let shownEvents = 0
-  let shownChampions = 0
+  function newGameCheck() {
+    if (newGameTime > gameTime) {
+      socket.emit('clear elements', '')
+      shownEvents = 0
+      shownChampions = 0
+    }
+  }
+
+
+  let itemNames = []
 
   function createTeams() {
     if (shownChampions === 0 && teamChaos.length != 0) {
@@ -186,5 +198,7 @@ io.on('connection', function(socket) {
 
   setInterval(() => {
     gameCheck()
+    newGameCheck()
+    newGameTime = gameTime
   }, 1000)
 })
