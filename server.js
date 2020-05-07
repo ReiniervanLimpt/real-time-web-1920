@@ -1,7 +1,43 @@
 const express = require('express')
 const app = express()
 const fs = require('fs')
-const request = require('request')
+const Request = require('request')
+const bodyParser = require('body-parser')
+
+const options = {
+  cert: fs.readFileSync('cert.pem'),
+  key: fs.readFileSync('key.pem'),
+  ca: fs.readFileSync('riotgames.pem')
+}
+
+const http = require('http').createServer(app)
+const io = require('socket.io')(http)
+
+
+function open(req, res) {
+  res.render('index.ejs')
+}
+http.listen(process.env.PORT || 3000)
+
+app.get('/', open)
+app.set('view engine', 'ejs')
+app.set('views', 'views')
+app.use(express.static('static'))
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({
+  extended: true
+}))
+
+let leagueData = []
+
+app.post('/riotdata', function(req, res) {
+
+  let allEvents = req.body.events.Events
+  let allPlayers = req.body.allPlayers
+
+  checkForEvents(allEvents)
+  getTeams(allPlayers)
+})
 
 let eventLog = []
 let teamChaos = []
@@ -15,88 +51,39 @@ let score = {
   wardScore: 0
 }
 
-const options = {
-  cert: fs.readFileSync('cert.pem'),
-  key: fs.readFileSync('key.pem'),
-  ca: fs.readFileSync('riotgames.pem')
+function checkForEvents(allEvents) {
+  console.log(allEvents)
+  const allEventsLength = allEvents.length
+
+  if (eventLog.length === 0) {
+    allEvents.forEach(element => eventLog.push(element))
+  } else if (eventLog.length + 2 === allEventsLength) {
+    const latestEvent = allEventsLength - 1
+    const duplicateEvent = allEventsLength - 2
+    eventLog.push(allEvents[duplicateEvent])
+    eventLog.push(allEvents[latestEvent])
+  } else if (eventLog.length + 1 === allEventsLength) {
+    const latestEvent = allEventsLength - 1
+    eventLog.push(allEvents[latestEvent])
+  }
 }
 
-function retrieveData() {
-  function checkForEvents() {
-    request({
-      method: 'GET',
-      uri: 'https://127.0.0.1:2999/liveclientdata/allgamedata',
-      agentOptions: {
-        ca: options.ca
-      }
-    }, (err, res, body) => {
-      const data = JSON.parse(body)
-      const allEventsLength = data.events.Events.length
-      const allEvents = data.events.Events
-      allPlayers = data.allPlayers
-
-      if (eventLog.length === 0) {
-        allEvents.forEach(element => eventLog.push(element))
-      } else if (eventLog.length + 2 === allEventsLength) {
-        const latestEvent = allEventsLength - 1
-        const duplicateEvent = allEventsLength - 2
-        eventLog.push(allEvents[duplicateEvent])
-        eventLog.push(allEvents[latestEvent])
-      } else if (eventLog.length + 1 === allEventsLength) {
-        const latestEvent = allEventsLength - 1
-        eventLog.push(allEvents[latestEvent])
-      }
-    })
-    setTimeout(checkForEvents, 1000)
+function getTeams(allPlayers) {
+  console.log(allPlayers)
+  if (teamOrder.length === 0) {
+    allPlayers.forEach(element => assignTeam(element))
   }
 
-  checkForEvents()
-
-  function getTeams() {
-    request({
-      method: 'GET',
-      uri: 'https://127.0.0.1:2999/liveclientdata/allgamedata',
-      agentOptions: {
-        ca: options.ca
-      }
-    }, (err, res, body) => {
-      const data = JSON.parse(body)
-      allPlayers = data.allPlayers
-      if (teamOrder.length === 0) {
-        allPlayers.forEach(element => assignTeam(element))
-      }
-    })
-
-    function assignTeam(player) {
-      if (player.team === "CHAOS") {
-        teamChaos.push(player)
-      } else if (player.team === "ORDER") {
-        teamOrder.push(player)
-      }
+  function assignTeam(player) {
+    if (player.team === "CHAOS") {
+      teamChaos.push(player)
+    } else if (player.team === "ORDER") {
+      teamOrder.push(player)
     }
   }
-  getTeams()
 }
 
-retrieveData()
 
-const https = require('https').createServer(options, app)
-const io = require('socket.io')(https)
-
-// with help from Maikel Sleebos
-
-app.set('view engine', 'ejs')
-app.set('views', 'views')
-
-app.use(express.static('static'))
-
-https.listen(process.env.PORT || 3000)
-
-app.get('/', open)
-
-function open(req, res) {
-  res.render('index.ejs')
-}
 
 io.on('connection', function(socket) {
 

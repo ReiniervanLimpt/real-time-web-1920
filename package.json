@@ -8,7 +8,6 @@
   },
   "scripts": {
     "start": "nodemon server.js",
-    "start-client": "nodemon client-server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -22,6 +21,7 @@
   },
   "homepage": "https://github.com/ReiniervanLimpt/real-time-web-1920#readme",
   "dependencies": {
+    "body-parser": "^1.19.0",
     "ejs": "^3.0.2",
     "express": "^4.17.1",
     "fs": "0.0.1-security",

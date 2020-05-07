@@ -7,20 +7,44 @@ const teamChaos = document.querySelector("#teamChaos")
 const teamOrder = document.querySelector("#teamOrder")
 const nameSelector = document.querySelector("#nameSelector")
 
+const commands = ["/yellow", "/blue", "/green", "/huge"]
+
 import championUpdate from '/modules/championUpdate.js'
 import eventUpdate from '/modules/eventUpdate.js'
 import clearElements from '/modules/clearElements.js'
 import teamAssigner from '/modules/teamAssigner.js'
-import formHandler from '/modules/formHandler.js'
+import messageHandler from '/modules/messageHandler.js'
 
 const socket = io(); // maakt een globale variabele van io dit is een connectie met de http server
 
 userForm.addEventListener("submit", function(e) {
-  formHandler.newUser(e)
+  e.preventDefault() // prevents page reloading
+  socket.emit('new user', document.querySelector('#u').value);
+  nameSelector.classList.add("hidden")
+  return false
 })
 
 chatForm.addEventListener("submit", function(e) {
-  formHandler.newChatMessage(e)
+  e.preventDefault(); // prevents page reloading
+  const message = document.querySelector("#m").value
+  const stringArray = message.split(" ")
+  const messageStyle = stringArray[0]
+  const assignedStyle = commands.includes(messageStyle)
+
+  if (assignedStyle == true) {
+    socket.emit('styled message', message.substring(messageStyle.length), messageStyle.substring(1));
+    m.value = ""
+    return false
+  } else if (assignedStyle == false && messageStyle.startsWith("/")) {
+    socket.emit('error message', messageStyle, commands)
+    socket.emit('chat message', message.substring(messageStyle.length));
+    m.value = ""
+    return false
+  } else {
+    socket.emit('chat message', message)
+    m.value = ""
+    return false
+  }
 })
 
 socket.on('team assignment', function(championSplash, championName, championTeam) {
@@ -48,28 +72,17 @@ socket.on('clear elements', function(clear) {
 })
 
 socket.on('styled message', function(msg, style) {
-  const newMessage = document.createElement("li")
-  newMessage.textContent = msg
-  newMessage.classList.add(style)
-  messages.appendChild(newMessage)
+  messageHandler.styledMessage(msg, style)
 })
 
 socket.on('chat message', function(msg, sender) {
-  const newMessage = document.createElement("li")
-  newMessage.classList.add(sender)
-  newMessage.textContent = msg
-  messages.appendChild(newMessage)
+  messageHandler.chatMessage(msg, sender)
 })
 
 socket.on('server message', function(msg) {
-  const newMessage = document.createElement("li")
-  newMessage.textContent = msg
-  messages.appendChild(newMessage)
+  messageHandler.serverMessage(msg)
 })
 
 socket.on('error message', function(errmessage) {
-  const newMessage = document.createElement("li")
-  newMessage.textContent = errmessage
-  newMessage.classList.add("error")
-  messages.appendChild(newMessage)
+  messageHandler.errorMessage(errmessage)
 })
