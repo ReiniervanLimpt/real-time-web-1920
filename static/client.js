@@ -86,7 +86,6 @@ socket.on('error message', function(errmessage) {
 })
 
 socket.on('game state', function(state) {
-  console.log(state)
   if (state === "open") {
     gameWaiter.classList.add("hidden")
   } else {

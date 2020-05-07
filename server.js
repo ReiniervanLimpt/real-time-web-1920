@@ -10,7 +10,6 @@ const io = require('socket.io')(http)
 let gameCheck = 0
 let allPlayers = []
 let allChampions = []
-let allEvents = []
 let leagueData = []
 let eventLog = []
 let teamChaos = []
@@ -26,6 +25,7 @@ let score = {
 function open(req, res) {
   res.render('index.ejs')
 }
+
 http.listen(process.env.PORT || 3000)
 
 app.get('/', open)
@@ -40,54 +40,28 @@ app.use(bodyParser.urlencoded({
 
 app.post('/riotdata', function(req, res) {
 
-  allEvents = req.body.events.Events
+  eventLog = req.body.events.Events
+
   allPlayers = req.body.allPlayers
 
-  checkForEvents(allEvents)
-  getTeams(allPlayers)
+  getTeams()
 
 })
 
-// setInterval(() => {
-//   gamecheck + 2
-// }, 5000)
+function getTeams() {
+  teamChaos = allPlayers.filter(function(team) {
+    return team.team === "CHAOS"
+  })
 
-function checkForEvents(allEvents) {
-  const allEventsLength = allEvents.length
+  teamOrder = allPlayers.filter(function(team) {
+    return team.team === "ORDER"
+  })
 
-  if (eventLog.length === 0) {
-    allEvents.forEach(element => eventLog.push(element))
-  } else if (eventLog.length + 2 === allEventsLength) {
-    const latestEvent = allEventsLength - 1
-    const duplicateEvent = allEventsLength - 2
-    eventLog.push(allEvents[duplicateEvent])
-    eventLog.push(allEvents[latestEvent])
-  } else if (eventLog.length + 1 === allEventsLength) {
-    const latestEvent = allEventsLength - 1
-    eventLog.push(allEvents[latestEvent])
-  }
+  allChampions = allPlayers.map(function(champion) {
+    return champion.championName
+  })
+
 }
-
-function getTeams(allPlayers) {
-  if (teamOrder.length === 0) {
-    allPlayers.forEach(element => storeChampions(element))
-    allPlayers.forEach(element => assignTeam(element))
-  }
-
-  function assignTeam(player) {
-    if (player.team === "CHAOS") {
-      teamChaos.push(player)
-    } else if (player.team === "ORDER") {
-      teamOrder.push(player)
-    }
-  }
-}
-
-function storeChampions(champion) {
-  allChampions.push(champion.championName)
-}
-
-
 
 io.on('connection', function(socket) {
 
@@ -204,11 +178,8 @@ io.on('connection', function(socket) {
   function gameCheck() {
     if (eventLog.length > 0) {
       const gameStartCheck = eventLog[0].EventName
-      const gameEndCheck = eventLog[eventLog.length - 1].EventName
-      if (gameStartCheck === "GameStart" && gameEndCheck != "GameEnd") {
+      if (gameStartCheck === "GameStart") {
         socket.emit('game state', "open")
-      } else if (gameEndCheck === "GameEnd") {
-        socket.emit('game state', "closed")
       }
     }
   }
