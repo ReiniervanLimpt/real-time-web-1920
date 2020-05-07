@@ -7,6 +7,8 @@ const bodyParser = require('body-parser')
 const http = require('http').createServer(app)
 const io = require('socket.io')(http)
 
+// global variables to store received data
+
 let allPlayers = []
 let gameTime = 0
 let allChampions = []
@@ -38,6 +40,7 @@ app.use(bodyParser.urlencoded({
 }))
 
 
+// with help from Maikel Sleebos, data is sent from local using a POST request
 app.post('/riotdata', function(req, res) {
 
   eventLog = req.body.events.Events
@@ -50,6 +53,7 @@ app.post('/riotdata', function(req, res) {
 
 })
 
+// Splitting up players into their corresponding teams and storing active championnames
 function getTeams() {
   teamChaos = allPlayers.filter(function(team) {
     return team.team === "CHAOS"
@@ -65,14 +69,18 @@ function getTeams() {
 
 }
 
+// the following code is unique to every socket that connects
 io.on('connection', function(socket) {
 
+  // variables used to check if the socket received the data from the server
   let newGameTime = 0
   let shownEvents = 0
   let shownChampions = 0
+  let itemNames = []
 
   socket.emit('clear elements', '')
 
+  // checks if a new game has started based on last known gametime
   function newGameCheck() {
     if (newGameTime > gameTime) {
       socket.emit('clear elements', '')
@@ -81,9 +89,7 @@ io.on('connection', function(socket) {
     }
   }
 
-
-  let itemNames = []
-
+  // if no champions have been rendered yet (checked with shownChampions, render them) this shows new champions if a new game has started
   function createTeams() {
     if (shownChampions === 0 && teamChaos.length != 0) {
       teamChaos.forEach(element => socket.emit('team assignment', `http://ddragon.leagueoflegends.com/cdn/10.9.1/img/champion/${element.championName}.png`, `${element.championName}`, `${element.team}`))
@@ -95,11 +101,12 @@ io.on('connection', function(socket) {
 
   createTeams()
 
+  // checks if there are new events to show the user
   function updateEvents() {
     if (shownEvents === 0) {
       eventLog.forEach(element => checkEventType(element))
       shownEvents = eventLog.length
-    } else if (shownEvents + 2 === eventLog.length) {
+    } else if (shownEvents + 2 === eventLog.length) { // some events fire at the exact same time requiring me to adress them this way
       const latestEvent = eventLog.length - 1
       const duplicateEvent = eventLog.length - 2
       checkEventType(eventLog[eventLog.length - 1])
@@ -116,7 +123,7 @@ io.on('connection', function(socket) {
 
   updateEvents()
 
-
+  // champion kill / regular events being split up
   function checkEventType(gameEvent) {
     if (gameEvent.EventName === "ChampionKill") {
       socket.emit('champion kill event', `${gameEvent.EventName}`, `${gameEvent.KillerName}`, `${gameEvent.VictimName}`)
@@ -125,6 +132,7 @@ io.on('connection', function(socket) {
     }
   }
 
+  // updating the score and state (dead / alive) of champions in game
   function checkState(champion) {
     const championScore = champion.scores
     if (champion.scores != score) {
@@ -141,7 +149,7 @@ io.on('connection', function(socket) {
   socket.username = `anonymous`
 
   socket.broadcast.emit(`${socket.username} joined the chat`)
-
+  // user gets assigned their username they selected, this gets stored in the socket
   socket.on('new user', function(id) {
     oldName = socket.username
     socket.username = id
@@ -158,6 +166,7 @@ io.on('connection', function(socket) {
     socket.emit('error message', `${error} is not a command try : ${options} *Championname*`)
   })
 
+  // user can write /items *Champion name* this retrieves the names of the items the champion is currently holding
   socket.on('command message', function(champion, command) {
     const championCheck = allChampions.includes(champion)
 
@@ -187,6 +196,7 @@ io.on('connection', function(socket) {
     io.emit('server message', msg)
   })
 
+  //checks if the eventlog has been updated after data has been posted, if that is the case users can enter the "game"
   function gameCheck() {
     if (eventLog.length > 0) {
       const gameStartCheck = eventLog[0].EventName
