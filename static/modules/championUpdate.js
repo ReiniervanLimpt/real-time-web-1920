@@ -12,7 +12,7 @@ const championUpdate = {
   updateScore: function(championName, championScore) {
     const score = document.getElementsByClassName(`${championName}Score`)[0]
     score.textContent = `${championScore}`
-  })
+  }
 
 }
 

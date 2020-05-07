@@ -1,3 +1,5 @@
+const kills = document.querySelector("#championKills")
+
 const eventUpdate = {
 
   updateEvent: function(msg) {

@@ -1,3 +1,6 @@
+const commands = ["/yellow", "/blue", "/green", "/huge"]
+const socket = io();
+
 const formHandler = {
 
   newUser: function(e) {

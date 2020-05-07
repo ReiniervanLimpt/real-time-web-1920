@@ -1,3 +1,5 @@
+const kills = document.querySelector("#championKills")
+
 const clearElements = {
 
   resetElements: function(clear) {

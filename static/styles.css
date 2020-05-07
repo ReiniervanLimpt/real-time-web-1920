@@ -131,7 +131,7 @@ body {
   padding: 0;
   overflow: scroll;
   overflow-x: hidden;
-  height: 30%;
+  height: 35%;
 }
 
 #messages li {
