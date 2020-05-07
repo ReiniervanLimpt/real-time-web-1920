@@ -7,7 +7,6 @@ const bodyParser = require('body-parser')
 const http = require('http').createServer(app)
 const io = require('socket.io')(http)
 
-
 let gameCheck = 0
 let allPlayers = []
 let allChampions = []
@@ -26,21 +25,6 @@ let score = {
 
 function open(req, res) {
   res.render('index.ejs')
-  let gameCheck = 0
-  let allPlayers = []
-  let allChampions = []
-  let allEvents = []
-  let leagueData = []
-  let eventLog = []
-  let teamChaos = []
-  let teamOrder = []
-  let score = {
-    assists: 0,
-    creepScore: 0,
-    deaths: 0,
-    kills: 0,
-    wardScore: 0
-  }
 }
 http.listen(process.env.PORT || 3000)
 
