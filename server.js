@@ -110,8 +110,6 @@ io.on('connection', function(socket) {
       teamChaos.forEach(element => socket.emit('team assignment', `http://ddragon.leagueoflegends.com/cdn/10.9.1/img/champion/${element.championName}.png`, `${element.championName}`, `${element.team}`))
       teamOrder.forEach(element => socket.emit('team assignment', `http://ddragon.leagueoflegends.com/cdn/10.9.1/img/champion/${element.championName}.png`, `${element.championName}`, `${element.team}`))
       shownChampions++
-      console.log(teamChaos.length)
-      console.log(shownChampions)
     }
     setTimeout(createTeams, 1000)
   }
