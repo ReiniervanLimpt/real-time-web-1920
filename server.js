@@ -28,21 +28,14 @@ app.use(bodyParser.urlencoded({
   extended: true
 }))
 
+let gameCheck = 0
+let allPlayers = []
+let allChampions = []
+let allEvents = []
 let leagueData = []
-
-app.post('/riotdata', function(req, res) {
-
-  let allEvents = req.body.events.Events
-  let allPlayers = req.body.allPlayers
-
-  checkForEvents(allEvents)
-  getTeams(allPlayers)
-})
-
 let eventLog = []
 let teamChaos = []
 let teamOrder = []
-let allPlayers = []
 let score = {
   assists: 0,
   creepScore: 0,
@@ -51,8 +44,21 @@ let score = {
   wardScore: 0
 }
 
+app.post('/riotdata', function(req, res) {
+
+  allEvents = req.body.events.Events
+  allPlayers = req.body.allPlayers
+
+  checkForEvents(allEvents)
+  getTeams(allPlayers)
+
+})
+
+// setInterval(() => {
+//   gamecheck + 2
+// }, 5000)
+
 function checkForEvents(allEvents) {
-  console.log(allEvents)
   const allEventsLength = allEvents.length
 
   if (eventLog.length === 0) {
@@ -69,8 +75,8 @@ function checkForEvents(allEvents) {
 }
 
 function getTeams(allPlayers) {
-  console.log(allPlayers)
   if (teamOrder.length === 0) {
+    allPlayers.forEach(element => storeChampions(element))
     allPlayers.forEach(element => assignTeam(element))
   }
 
@@ -83,9 +89,15 @@ function getTeams(allPlayers) {
   }
 }
 
+function storeChampions(champion) {
+  allChampions.push(champion.championName)
+}
+
 
 
 io.on('connection', function(socket) {
+
+  let itemNames = []
 
   socket.emit('clear elements', '')
 
@@ -158,17 +170,33 @@ io.on('connection', function(socket) {
   })
 
   socket.on('disconnect', function() { // bij een connectie die verbroken wordt, voer dit uit:
+    socket.broadcast.emit('chat message', `${socket.username} disconnected from chat`, "other")
     console.log('user disconnected');
   })
 
   socket.on('error message', function(error, options) {
-    socket.emit('error message', `${error} is not a command try : ${options}`)
+    socket.emit('error message', `${error} is not a command try : ${options} *Championname*`)
   })
 
-  socket.on('styled message', function(msg, style) {
-    socket.broadcast.emit('styled message', `${socket.username} : ${msg}`, style)
-    socket.emit('styled message', `${msg}`, style)
+  socket.on('command message', function(champion, command) {
+    const championCheck = allChampions.includes(champion)
+
+    if (championCheck === true) {
+      const retrievedChampion = allPlayers.filter(function(name) {
+        return name.championName === `${champion}`
+      })
+      const retrievedItems = retrievedChampion[0].items
+      retrievedItems.forEach(element => showItems(element))
+      socket.emit('chat message', `${champion}'s items: '${itemNames}`)
+      itemNames = []
+    } else {
+      socket.emit('error message', `${champion} is not in this game...`)
+    }
   })
+
+  function showItems(items) {
+    itemNames.push(" " + items.displayName)
+  }
 
   socket.on('chat message', function(msg) {
     socket.broadcast.emit('chat message', `${socket.username} : ${msg}`, "other")
@@ -178,4 +206,20 @@ io.on('connection', function(socket) {
   socket.on('server message', function(msg) {
     io.emit('server message', msg)
   })
+
+  function gameCheck() {
+    if (eventLog.length > 0) {
+      const gameStartCheck = eventLog[0].EventName
+      const gameEndCheck = eventLog[eventLog.length - 1].EventName
+      if (gameStartCheck === "GameStart" && gameEndCheck != "GameEnd") {
+        socket.emit('game state', "open")
+      } else if (gameEndCheck === "GameEnd") {
+        socket.emit('game state', "closed")
+      }
+    }
+  }
+
+  setInterval(() => {
+    gameCheck()
+  }, 1000)
 })

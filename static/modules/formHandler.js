@@ -1,4 +1,4 @@
-const commands = ["/yellow", "/blue", "/green", "/huge"]
+const commands = ["/items"]
 const socket = io();
 
 const formHandler = {
@@ -18,7 +18,7 @@ const formHandler = {
     const assignedStyle = commands.includes(messageStyle)
 
     if (assignedStyle == true) {
-      socket.emit('styled message', message.substring(messageStyle.length), messageStyle.substring(1));
+      socket.emit('command message', message.substring(messageStyle.length), messageStyle.substring(1));
       m.value = ""
       return false
     } else if (assignedStyle == false && messageStyle.startsWith("/")) {

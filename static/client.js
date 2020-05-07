@@ -1,3 +1,4 @@
+const gameWaiter = document.querySelector("#gameWaiter")
 const chatForm = document.querySelector('.message')
 const userForm = document.querySelector(".username")
 const messages = document.querySelector("#messages")
@@ -7,7 +8,7 @@ const teamChaos = document.querySelector("#teamChaos")
 const teamOrder = document.querySelector("#teamOrder")
 const nameSelector = document.querySelector("#nameSelector")
 
-const commands = ["/yellow", "/blue", "/green", "/huge"]
+const commands = ["/items"]
 
 import championUpdate from '/modules/championUpdate.js'
 import eventUpdate from '/modules/eventUpdate.js'
@@ -28,16 +29,17 @@ chatForm.addEventListener("submit", function(e) {
   e.preventDefault(); // prevents page reloading
   const message = document.querySelector("#m").value
   const stringArray = message.split(" ")
-  const messageStyle = stringArray[0]
-  const assignedStyle = commands.includes(messageStyle)
+  const messageCommand = stringArray[0]
+  const messageOption = stringArray[1]
+  const assignedCommand = commands.includes(messageCommand)
 
-  if (assignedStyle == true) {
-    socket.emit('styled message', message.substring(messageStyle.length), messageStyle.substring(1));
+  if (assignedCommand == true) {
+    socket.emit('command message', messageOption, messageCommand.substring(1));
     m.value = ""
     return false
-  } else if (assignedStyle == false && messageStyle.startsWith("/")) {
-    socket.emit('error message', messageStyle, commands)
-    socket.emit('chat message', message.substring(messageStyle.length));
+  } else if (assignedCommand == false && messageCommand.startsWith("/")) {
+    socket.emit('error message', messageCommand, commands)
+    socket.emit('chat message', message.substring(messageCommand.length));
     m.value = ""
     return false
   } else {
@@ -71,10 +73,6 @@ socket.on('clear elements', function(clear) {
   clearElements.resetElements(clear)
 })
 
-socket.on('styled message', function(msg, style) {
-  messageHandler.styledMessage(msg, style)
-})
-
 socket.on('chat message', function(msg, sender) {
   messageHandler.chatMessage(msg, sender)
 })
@@ -85,4 +83,13 @@ socket.on('server message', function(msg) {
 
 socket.on('error message', function(errmessage) {
   messageHandler.errorMessage(errmessage)
+})
+
+socket.on('game state', function(state) {
+  console.log(state)
+  if (state === "open") {
+    gameWaiter.classList.add("hidden")
+  } else {
+    gameWaiter.classList.remove("hidden")
+  }
 })

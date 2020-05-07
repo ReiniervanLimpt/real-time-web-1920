@@ -60,7 +60,7 @@ body {
 #eventSection {
   flex-wrap: wrap;
   display: flex;
-  height: 60%;
+  height: 63%;
   background-color: rgba(255, 255, 255, 0.6);
   border-radius: 10px;
   padding-top: 2px;
@@ -131,7 +131,7 @@ body {
   padding: 0;
   overflow: scroll;
   overflow-x: hidden;
-  height: 33%;
+  height: 30%;
 }
 
 #messages li {
@@ -163,6 +163,26 @@ body {
   z-index: 1;
 }
 
+#gameWaiter {
+  font-size:3em;
+  width: 100%;
+  position: absolute;
+  height: 100%;
+  z-index: 2;
+  text-align: center;
+  background-image: url("SR.jpg");
+}
+
+#gameWaiter h1{
+  padding-top: 20%;
+  font-size: 2em;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+#gameWaiter p {
+  background: rgba(255, 255, 255, 0.6);
+}
+
 .dead{
   opacity: 0.3;
 }
@@ -173,7 +193,6 @@ body {
 
 form.message {
   padding: 3px;
-  position: fixed;
   bottom: 0;
   width: 100%;
 }

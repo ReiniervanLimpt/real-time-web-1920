@@ -1,12 +1,5 @@
 const messageHandler = {
 
-  styledMessage: function(msg, style) {
-    const newMessage = document.createElement("li")
-    newMessage.textContent = msg
-    newMessage.classList.add(style)
-    messages.appendChild(newMessage)
-  },
-
   chatMessage: function(msg, sender) {
     const newMessage = document.createElement("li")
     newMessage.classList.add(sender)
