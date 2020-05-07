@@ -4,12 +4,6 @@ const fs = require('fs')
 const Request = require('request')
 const bodyParser = require('body-parser')
 
-const options = {
-  cert: fs.readFileSync('cert.pem'),
-  key: fs.readFileSync('key.pem'),
-  ca: fs.readFileSync('riotgames.pem')
-}
-
 const http = require('http').createServer(app)
 const io = require('socket.io')(http)
 
