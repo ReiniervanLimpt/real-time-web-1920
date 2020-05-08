@@ -101,6 +101,8 @@ app.post('/riotdata', function(req, res) {
 
 10. Start both servers and go to http://localhost:3000 :sparkles:
 
+*credit goes to Maikel Sleebos for helping me set this up
+
 # :globe_with_meridians: API usage :globe_with_meridians:
 
 This app makes use of the [riot games live client API](https://developer.riotgames.com/docs/lol#game-client-api_live-client-data-api) The game client API's are served over https and are only available to native applications... i cannot openly upload Riot Games root certificate so i had to work around that by creating another server which POSTs data to my live heroku website...
