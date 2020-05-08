@@ -34,6 +34,8 @@ This app was made in nodeJS
 
 ## creating the client server :computer: :shipit:
 
+[My client server example](https://github.com/ReiniervanLimpt/real-time-web-1920/tree/master/client-server-example)
+
 *create a new server: navigate to an empty directory and `git init`
 
 1. Create a server.js file and include `"start": "server.js",` in package.json's "scripts" tags
