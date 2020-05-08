@@ -12,7 +12,6 @@ const io = require('socket.io')(http)
 let allPlayers = []
 let gameTime = 0
 let allChampions = []
-let leagueData = []
 let eventLog = []
 let teamChaos = []
 let teamOrder = []
@@ -86,6 +85,8 @@ io.on('connection', function(socket) {
       socket.emit('clear elements', '')
       shownEvents = 0
       shownChampions = 0
+    } else if (newGameTime === gameTime) {
+      socket.emit('game state', "closed")
     }
   }
 
