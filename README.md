@@ -101,7 +101,7 @@ app.post('/riotdata', function(req, res) {
 
 10. Start both servers and go to http://localhost:3000 :sparkles:
 
-# API usage
+# :globe_with_meridians: API usage :globe_with_meridians:
 
 This app makes use of the [riot games live client API](https://developer.riotgames.com/docs/lol#game-client-api_live-client-data-api) The game client API's are served over https and are only available to native applications... i cannot openly upload Riot Games root certificate so i had to work around that by creating another server which POSTs data to my live heroku website...
 
@@ -209,3 +209,125 @@ allPlayers = [{
 *score variable is a default state for the allPlayers.scores object*
 
 ---
+
+# Events 
+
+* Users can chat with eachother
+
+* Users get to request the items of a champion in game
+
+* Teams get updated realtime
+
+* Champions scores get updated realtime
+
+* Events are shown realtime
+
+* Champion scores are shown realtime
+
+* error messages
+
+## Events per socket connection
+
+```javascript
+  //checks if the eventlog has been updated after data has been posted, if that is the case users can enter the "game"
+  
+    // checks if a new game has started based on last known gametime
+  function newGameCheck() {
+    if (newGameTime > gameTime) {
+      socket.emit('clear elements', '')
+      shownEvents = 0
+      shownChampions = 0
+    }
+  }
+  
+  function gameCheck() {
+    if (eventLog.length > 0) {
+      const gameStartCheck = eventLog[0].EventName
+      if (gameStartCheck === "GameStart") {
+        socket.emit('game state', "open")
+      }
+    }
+  }
+
+  setInterval(() => {
+    gameCheck()
+    newGameCheck()
+    newGameTime = gameTime
+  }, 1000)
+})
+```
+
+### game state events
+```
+EVENT = 'game state'
+- Updates the webpage to no longer show the starting splash screen
+
+EVENT = 'clear elements'
+- Updates all elements to show new data if a new game has started
+```
+
+![no game active](https://user-images.githubusercontent.com/36195440/81378305-5e3bd700-9107-11ea-8ef0-0dfa3879244b.png)
+
+### Creating teams and displaying real time data
+
+```javascript
+ // if no champions have been rendered yet (checked with shownChampions, render them) this shows new champions if a new game has started
+  function createTeams() {
+    if (shownChampions === 0 && teamChaos.length != 0) {
+      teamChaos.forEach(element => socket.emit('team assignment', `http://ddragon.leagueoflegends.com/cdn/10.9.1/img/champion/${element.championName}.png`, `${element.championName}`, `${element.team}`))
+      teamOrder.forEach(element => socket.emit('team assignment', `http://ddragon.leagueoflegends.com/cdn/10.9.1/img/champion/${element.championName}.png`, `${element.championName}`, `${element.team}`))
+      shownChampions++
+    }
+    setTimeout(createTeams, 1000)
+  }
+  createTeams()
+```
+```
+EVENT = 'team assignment'
+- Creates teams with the correct champion splash retrieved from the server, their Champions name and their team
+```
+
+```javascript
+  // updating the score and state (dead / alive) of champions in game
+  function checkState(champion) {
+    const championScore = champion.scores
+    if (champion.scores != score) {
+      socket.emit('update score', `${champion.championName}`, `${championScore.kills} / ${championScore.deaths} / ${championScore.assists}`)
+      score = championScore
+    }
+    if (champion.isDead === false) {
+      socket.emit('champion status', "alive", `${champion.championName}`)
+    } else {
+      socket.emit('champion status', "dead", `${champion.championName}`)
+    }
+  }
+  ```
+```
+EVENT = 'update score'
+- Constantly checks the state of champions by their "scores" value
+
+EVENT = 'champion status'
+- Constantly checks if champion is still alive by their"isDead (bool)" value
+```
+
+### Updating events
+
+```javascript
+  // champion kill / regular events being split up
+  function checkEventType(gameEvent) {
+    if (gameEvent.EventName === "ChampionKill") {
+      socket.emit('champion kill event', `${gameEvent.EventName}`, `${gameEvent.KillerName}`, `${gameEvent.VictimName}`)
+    } else {
+      socket.emit('new event', `${gameEvent.EventName}`)
+    }
+  }
+```
+```
+EVENT = 'champion kill event'
+- emits with 3 parameters: EventName, KillerName and VictimName to display in the kills section
+
+EVENT = 'champion status'
+- emits with 1 parameter: EventName to show in the regular event section
+```
+  
+  
