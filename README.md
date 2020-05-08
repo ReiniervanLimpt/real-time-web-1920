@@ -239,6 +239,8 @@ allPlayers = [{
       socket.emit('clear elements', '')
       shownEvents = 0
       shownChampions = 0
+    } else if (newGameTime === gameTime) {
+      socket.emit('game state', "closed")
     }
   }
   
@@ -260,7 +262,7 @@ allPlayers = [{
 ```
 ```
 EVENT = 'game state'
-- Updates the webpage to no longer show the starting splash screen
+- Updates the webpage to no longer show the starting splash screen or show it when the game is no longer running
 
 EVENT = 'clear elements'
 - Updates all elements to show new data if a new game has started
