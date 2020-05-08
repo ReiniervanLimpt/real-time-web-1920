@@ -87,6 +87,8 @@ io.on('connection', function(socket) {
       shownChampions = 0
     } else if (newGameTime === gameTime) {
       socket.emit('game state', "closed")
+    } else if (newGameTime < gameTime) {
+      socket.emit('game state', "open")
     }
   }
 
@@ -197,18 +199,7 @@ io.on('connection', function(socket) {
     io.emit('server message', msg)
   })
 
-  //checks if the eventlog has been updated after data has been posted, if that is the case users can enter the "game"
-  function gameCheck() {
-    if (eventLog.length > 0) {
-      const gameStartCheck = eventLog[0].EventName
-      if (gameStartCheck === "GameStart") {
-        socket.emit('game state', "open")
-      }
-    }
-  }
-
   setInterval(() => {
-    gameCheck()
     newGameCheck()
     newGameTime = gameTime
   }, 1000)
