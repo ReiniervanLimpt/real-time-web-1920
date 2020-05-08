@@ -243,20 +243,12 @@ allPlayers = [{
       shownChampions = 0
     } else if (newGameTime === gameTime) {
       socket.emit('game state', "closed")
-    }
-  }
-  
-  function gameCheck() {
-    if (eventLog.length > 0) {
-      const gameStartCheck = eventLog[0].EventName
-      if (gameStartCheck === "GameStart") {
-        socket.emit('game state', "open")
-      }
+    } else if (newGameTime < gameTime) {
+      socket.emit('game state', "open")
     }
   }
 
   setInterval(() => {
-    gameCheck()
     newGameCheck()
     newGameTime = gameTime
   }, 1000)
