@@ -34,7 +34,7 @@ This app was made in nodeJS
 
 ## creating the client server :computer: :shipit:
 
-[My client server example](https://github.com/ReiniervanLimpt/real-time-web-1920/tree/master/client-server-example)
+:point_right: [My client server example](https://github.com/ReiniervanLimpt/real-time-web-1920/tree/master/client-server-example) :point_left:
 
 *create a new server: navigate to an empty directory and `git init`
 
