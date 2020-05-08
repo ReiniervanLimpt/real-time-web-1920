@@ -1,6 +1,6 @@
 # League of legends client spectator
 
-![example](https://user-images.githubusercontent.com/36195440/81354987-58290480-90cd-11ea-8894-799002acfdf1.png)
+![example](https://user-images.githubusercontent.com/36195440/81388462-9ef01c00-9118-11ea-9526-06c817b7a046.png)
 
 https://lol-client-spectator-rtw.herokuapp.com/
 
