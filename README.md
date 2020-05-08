@@ -210,7 +210,7 @@ allPlayers = [{
 
 ---
 
-# Events 
+# :satellite: Events :satellite:
 
 * Users can chat with eachother
 
@@ -227,6 +227,8 @@ allPlayers = [{
 * error messages
 
 ## Events per socket connection
+
+### game state events
 
 ```javascript
   //checks if the eventlog has been updated after data has been posted, if that is the case users can enter the "game"
@@ -256,8 +258,6 @@ allPlayers = [{
   }, 1000)
 })
 ```
-
-### game state events
 ```
 EVENT = 'game state'
 - Updates the webpage to no longer show the starting splash screen
@@ -267,6 +267,8 @@ EVENT = 'clear elements'
 ```
 
 ![no game active](https://user-images.githubusercontent.com/36195440/81378305-5e3bd700-9107-11ea-8ef0-0dfa3879244b.png)
+
+---
 
 ### Creating teams and displaying real time data
 
@@ -286,6 +288,7 @@ EVENT = 'clear elements'
 EVENT = 'team assignment'
 - Creates teams with the correct champion splash retrieved from the server, their Champions name and their team
 ```
+---
 
 ```javascript
   // updating the score and state (dead / alive) of champions in game
@@ -309,6 +312,7 @@ EVENT = 'update score'
 EVENT = 'champion status'
 - Constantly checks if champion is still alive by their"isDead (bool)" value
 ```
+---
 
 ### Updating events
 
@@ -329,5 +333,27 @@ EVENT = 'champion kill event'
 EVENT = 'champion status'
 - emits with 1 parameter: EventName to show in the regular event section
 ```
+---
   
-  
+## User sent events
+
+```
+EVENT = 'new user'
+- user gets assigned the name they fill in before they join the "game room
+
+EVENT = 'command message'
+- user gets to request the items of a champion in game being played by typing /items ChampionName
+```
+
+# :exclamation: Would haves :exclamation:
+
+- [] i would have liked to implement more user intereaction, like a betting system allowing users to predict which team kills another champion first or first building destroyed
+- [] more data for users to request (like the champion items)
+- [] message log to show messages you missed when the server or the user is offline for a while
+- [] game rooms for each dataset sent from a client server to the webserver
+
+# :fireworks: Proud of's :fireworks:
+
+I spent a lot of time splitting up the data received from the live client API and got to display their values as real-time as i hoped i would be able to when designing my concept, the data required me to constantly adapt and make changes to my ideas...
+
+I have created an app which i can expand on and wish to be using myself as it is very handy to have running on a secondary monitor to get more data from, and become better in my League of Legends games!
