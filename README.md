@@ -312,6 +312,9 @@ EVENT = 'update score'
 EVENT = 'champion status'
 - Constantly checks if champion is still alive by their"isDead (bool)" value
 ```
+
+![teams](https://user-images.githubusercontent.com/36195440/81380319-fe472f80-910a-11ea-972e-962948c5cc33.png)
+
 ---
 
 ### Updating events
